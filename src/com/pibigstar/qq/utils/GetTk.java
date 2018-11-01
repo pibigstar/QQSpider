@@ -1,9 +1,7 @@
 package com.pibigstar.qq.utils;
 
 /**
- * µÃµ½g_tk
  * @author pibigstar
- *
  */
 public class GetTk {
 

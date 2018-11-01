@@ -1,11 +1,7 @@
 package com.pibigstar.qq.utils;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
+import javax.swing.*;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +11,8 @@ public class GetCookies {
 	 * @param cookie
 	 * @return
 	 */
-	public static Map<String, String> getCookies(String cookie){
+	private static final String CONFIG_FILE = "conf.txt";
+	public static Map<String, String> parseCookie(String cookie){
 		if (cookie==null||cookie.length()==0) {
 			return null;
 		}
@@ -34,9 +31,11 @@ public class GetCookies {
 	}
 
 	public static String getCookieFromFile() throws IOException {
-		File file = new File("conf.txt");
+		File file = new File(CONFIG_FILE);
 		if (!file.exists()) {
 			file.createNewFile();
+			String cookies = showInputCookie();
+			return cookies;
 		}
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		String temp,cookies = ""; 
@@ -45,6 +44,42 @@ public class GetCookies {
 			cookies+=temp;
 		}
 		System.out.println(cookies);
+		br.close();
+
 		return cookies;
+	}
+
+	private static void writeCookieToFile(String cookies) throws IOException {
+		File file = new File(CONFIG_FILE);
+		FileWriter fw = new FileWriter(file);
+		fw.write(cookies);
+		fw.flush();
+		fw.close();
+	}
+
+	public static Boolean checkCookies(String cookies) {
+		if (cookies.length() < 10) {
+			JOptionPane.showMessageDialog(null,"请输入合法的Cookies");
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	private static String showInputCookie(){
+		boolean b = true;
+		while (b) {
+			String cookies = JOptionPane.showInputDialog("输入你的Cookies");
+			if (checkCookies(cookies)) {
+				b = false;
+				try {
+					writeCookieToFile(cookies);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return cookies;
+			}
+		}
+		return "";
 	}
 }

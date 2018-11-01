@@ -1,0 +1,8 @@
+# ignore config xml
+
+.idea/*
+.DS_Store
+bin
+.settings
+classes
+src/META-INF
